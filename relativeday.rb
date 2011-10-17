@@ -3,7 +3,7 @@ require 'Time'
 class RelativeDay
 	def self.getDate(day, *args)
 		time = Time.new
-		wday = getDayNumeric(day)
+		wday = day.is_a?(Symbol) ? getDayNumeric(day) : day
 
 		hour, minute, second = 0, 0, 0
 
@@ -11,8 +11,6 @@ class RelativeDay
 			params = args[0]
 			if params.is_a? Hash
 				#can pass in custom time, set hour + min if custom time passed in
-				#, 
-				#, 
 				time = params[:time] if params[:time] and params[:time].is_a? Time
 				hour, minute, second = time.hour, time.min, time.sec if params[:time]
 
@@ -22,11 +20,10 @@ class RelativeDay
 
 				hour = params[:hour] if params[:hour]
 				minute = params[:minute] if params[:minute]
-				sec = params[:second] if params[:second]
+				second = params[:second] if params[:second]
 			end
 		end
 
-		#align day
 		theDay = Time.at(time.to_i + ((wday - time.wday) * (60*60*24)))
 
 		#align hours and minutes
